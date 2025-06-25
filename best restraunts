@@ -1,0 +1,85 @@
+import json
+
+FILENAME = 'restaurants.json'
+
+def load_data():
+    try:
+        with open(FILENAME, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return []
+
+def save_data(data):
+    with open(FILENAME, 'w') as f:
+        json.dump(data, f, indent=2)
+
+def add_restaurant(data):
+    name = input("Restaurant name: ")
+    location = input("Location: ")
+    cuisine = input("Cuisine (e.g., Italian, Chinese): ")
+    rating = float(input("Rating (0.0 to 5.0): "))
+
+    restaurant = {
+        "name": name,
+        "location": location,
+        "cuisine": cuisine,
+        "rating": rating
+    }
+    data.append(restaurant)
+    print("Restaurant added!")
+
+def view_restaurants(data):
+    if not data:
+        print("No restaurants available.")
+        return
+    for i, r in enumerate(data, 1):
+        print(f"{i}. {r['name']} - {r['cuisine']} | {r['location']} | Rating: {r['rating']}/5")
+
+def search_by_cuisine(data):
+    cuisine = input("Enter cuisine type: ").lower()
+    results = [r for r in data if r['cuisine'].lower() == cuisine]
+    if results:
+        for r in results:
+            print(f"{r['name']} - {r['location']} | Rating: {r['rating']}/5")
+    else:
+        print("No matching restaurants found.")
+
+def search_by_location(data):
+    location = input("Enter location: ").lower()
+    results = [r for r in data if r['location'].lower() == location]
+    if results:
+        for r in results:
+            print(f"{r['name']} - {r['cuisine']} | Rating: {r['rating']}/5")
+    else:
+        print("No restaurants found in that location.")
+
+def sort_by_rating(data):
+    sorted_data = sorted(data, key=lambda r: r['rating'], reverse=True)
+    print("Restaurants sorted by rating (high to low):")
+    for r in sorted_data:
+        print(f"{r['name']} - {r['cuisine']} | {r['location']} | Rating: {r['rating']}/5")
+
+def main():
+    data = load_data()
+    while True:
+        print("\nOptions: add, view, search_cuisine, search_location, sort_rating, quit")
+        choice = input("Choose an option: ").lower()
+        if choice == 'add':
+            add_restaurant(data)
+        elif choice == 'view':
+            view_restaurants(data)
+        elif choice == 'search_cuisine':
+            search_by_cuisine(data)
+        elif choice == 'search_location':
+            search_by_location(data)
+        elif choice == 'sort_rating':
+            sort_by_rating(data)
+        elif choice == 'quit':
+            save_data(data)
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid option.")
+
+if __name__ == "__main__":
+    main()
