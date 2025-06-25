@@ -1,0 +1,37 @@
+# train_availability.py
+
+trains = [
+    {"train_no": "12301", "name": "Rajdhani Express", "source": "Delhi", "dest": "Mumbai", "departure": "16:00", "arrival": "08:00"},
+    {"train_no": "12456", "name": "Duronto Express", "source": "Delhi", "dest": "Kolkata", "departure": "18:00", "arrival": "10:30"},
+    {"train_no": "12567", "name": "Garib Rath", "source": "Delhi", "dest": "Chennai", "departure": "15:30", "arrival": "12:00"},
+    {"train_no": "12890", "name": "Superfast Express", "source": "Mumbai", "dest": "Delhi", "departure": "05:45", "arrival": "20:00"},
+]
+
+def search_trains(source, dest):
+    found = False
+    for train in trains:
+        if train['source'].lower() == source.lower() and train['dest'].lower() == dest.lower():
+            print(f"\nTrain No: {train['train_no']}")
+            print(f"Name: {train['name']}")
+            print(f"Departure: {train['departure']} | Arrival: {train['arrival']}")
+            found = True
+    if not found:
+        print("No trains found between the selected stations.")
+
+def main():
+    print("=== Train Availability Checker ===")
+    while True:
+        print("\nMenu: search / quit")
+        choice = input("Enter your choice: ").lower()
+        if choice == "search":
+            source = input("Enter source station: ")
+            dest = input("Enter destination station: ")
+            search_trains(source, dest)
+        elif choice == "quit":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice.")
+
+if __name__ == "__main__":
+    main()
