@@ -1,0 +1,79 @@
+import json
+
+FILENAME = 'cars.json'
+
+def load_cars():
+    try:
+        with open(FILENAME, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return []
+
+def save_cars(cars):
+    with open(FILENAME, 'w') as f:
+        json.dump(cars, f, indent=2)
+
+def add_car(cars):
+    make = input("Enter car make (e.g., Ford): ")
+    model = input("Enter car model (e.g., Mustang): ")
+    year = input("Enter car year (e.g., 2021): ")
+    color = input("Enter car color: ")
+    
+    car = {
+        "make": make,
+        "model": model,
+        "year": year,
+        "color": color
+    }
+    cars.append(car)
+    print("Car added!")
+
+def view_cars(cars):
+    if not cars:
+        print("No cars in the database.")
+        return
+    for i, car in enumerate(cars, 1):
+        print(f"{i}. {car['year']} {car['make']} {car['model']} - {car['color']}")
+
+def search_by_make(cars):
+    make = input("Enter make to search for: ").lower()
+    results = [car for car in cars if car['make'].lower() == make]
+    if results:
+        print(f"Cars by {make.title()}:")
+        for car in results:
+            print(f"{car['year']} {car['make']} {car['model']} - {car['color']}")
+    else:
+        print("No cars found for that make.")
+
+def search_by_year(cars):
+    year = input("Enter year to search for: ")
+    results = [car for car in cars if car['year'] == year]
+    if results:
+        print(f"Cars from year {year}:")
+        for car in results:
+            print(f"{car['year']} {car['make']} {car['model']} - {car['color']}")
+    else:
+        print("No cars found from that year.")
+
+def main():
+    cars = load_cars()
+    while True:
+        print("\nOptions: add, view, search_make, search_year, quit")
+        choice = input("Choose an option: ").lower()
+        if choice == 'add':
+            add_car(cars)
+        elif choice == 'view':
+            view_cars(cars)
+        elif choice == 'search_make':
+            search_by_make(cars)
+        elif choice == 'search_year':
+            search_by_year(cars)
+        elif choice == 'quit':
+            save_cars(cars)
+            print("Data saved. Goodbye!")
+            break
+        else:
+            print("Invalid option.")
+
+if __name__ == "__main__":
+    main()
